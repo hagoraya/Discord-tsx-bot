@@ -5,8 +5,6 @@ const Scraper = require('./Scraper')
 
 
 const TOKEN = process.env.DISCORD_TOKEN
-
-
 const regex = /^\$\w+$/
 
 
