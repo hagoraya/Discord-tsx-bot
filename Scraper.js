@@ -2,14 +2,14 @@ const puppeteer = require('puppeteer');
 const $ = require('cheerio')
 
 
-
 //Run Scraper
 
 async function configBrower(url) {
     const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
     await page.goto(url);
-    return page;
+
+    return [page, browser];
 
 }
 
@@ -65,8 +65,7 @@ async function getData(page) {
 
     //console.log("Stock Data: \n", StockData)
 
-    await page.close()
-    await browser.close()
+
 
     return StockData
 }
@@ -74,10 +73,24 @@ async function getData(page) {
 
 async function monitor(url) {
     console.log("Running Scraper")
-    let page = await configBrower(url);
+    let values = await configBrower(url);
+
+    var page = values[0];
+    var brow = values[1];
+
+
+
+
+
     const StockData = await getData(page);
 
+    await page.close();
+    await brow.close();
 
+
+
+    const used = process.memoryUsage().heapUsed / 1024 / 1024;
+    console.log(`Scraper used ${Math.round(used * 100) / 100} MB`);
     return StockData
 }
 
