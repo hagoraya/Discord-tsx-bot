@@ -65,6 +65,8 @@ async function getData(page) {
 
     //console.log("Stock Data: \n", StockData)
 
+    await page.close()
+    await browser.close()
 
     return StockData
 }
@@ -74,6 +76,8 @@ async function monitor(url) {
     console.log("Running Scraper")
     let page = await configBrower(url);
     const StockData = await getData(page);
+
+
     return StockData
 }
 
