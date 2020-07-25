@@ -5,16 +5,28 @@ const $ = require('cheerio')
 //Run Scraper
 
 async function configBrower(url) {
-    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
-    const page = await browser.newPage();
-    await page.goto(url);
 
-    return [page, browser];
+
+    try {
+        const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+        const page = await browser.newPage();
+        await page.goto(url);
+        return [page, browser];
+
+    } catch (error) {
+        console.log("Error in configBrower", error);
+    }
+
 
 }
 
 async function getData(page) {
-    await page.reload();
+    try {
+        await page.reload();
+
+    } catch (error) {
+        console.log("Error whole page reload", error)
+    }
 
     let html = await page.evaluate(() => document.body.innerHTML);
     // console.log(html)
@@ -72,11 +84,19 @@ async function getData(page) {
 
 
 async function monitor(url) {
-    console.log("Running Scraper")
-    let values = await configBrower(url);
+    console.log(`Running Scraper with ${url}`)
 
-    var page = values[0];
-    var brow = values[1];
+
+
+    try {
+        let values = await configBrower(url);
+        var page = values[0];
+        var brow = values[1];
+    } catch (error) {
+        console.log("Error setting configs for browser", error)
+    }
+
+
 
 
 
@@ -84,8 +104,13 @@ async function monitor(url) {
 
     const StockData = await getData(page);
 
-    await page.close();
-    await brow.close();
+
+
+    try {
+        await brow.close();
+    } catch (error) {
+        console.log("Error closing browser", error)
+    }
 
 
 

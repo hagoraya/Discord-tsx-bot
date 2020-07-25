@@ -4,6 +4,8 @@ const bot = new Discord.Client();
 const Scraper = require('./Scraper')
 
 
+var queue = [];
+
 const TOKEN = process.env.DISCORD_TOKEN
 const regex = /^\$\w+$/
 
@@ -22,22 +24,29 @@ function main() {
         //console.log(msg.content)
         if (validTicker(msg.content)) {
             const symbol = msg.content.substr(1)
+            queue.push(symbol)
+            console.log(queue)
 
-            const URL = `https://web.tmxmoney.com/company.php?qm_symbol=${symbol}`
+            while (queue.length > 0) {
+                const URL = `https://web.tmxmoney.com/company.php?qm_symbol=${queue.shift()}`
+
+                Scraper.monitor(URL).then((data) => {
+                    if (data) {
+                        msg.reply(`\`\`\`${data.companyName}\n\nCurrent Price: $${data.price}\n52 Week High: $${data.high52}\n52 Week Low: $${data.low52} \`\`\`
+                    `)
+                    } else {
+                        msg.reply(`Cannot find \`${symbol}\` on TSX`)
+                    }
+                })
 
 
 
-            Scraper.monitor(URL).then((data) => {
-                // console.log('Date from Scraper: \n', data)
-                if (data) {
-                    msg.reply(`\`\`\`${data.companyName}\n\nCurrent Price: $${data.price}\n52 Week High: $${data.high52}\n52 Week Low: $${data.low52} \`\`\`
-                `)
-                } else {
-                    msg.reply(`Cannot find \`${symbol}\` on TSX`)
-                }
+            }
 
 
-            })
+
+
+
 
         }
     })
@@ -46,12 +55,6 @@ function main() {
 }
 
 
-
-function priceFormat(price) {
-    var prce = parseFloat(price)
-    prce.toFixed(2)
-    return prce
-}
 
 function validTicker(ticker) {
     //console.log(ticker)
