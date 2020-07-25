@@ -8,7 +8,7 @@ async function configBrower(url) {
 
 
     try {
-        const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+        const browser = await puppeteer.launch({ args: ['--no-sandbox', '--single-process'] });
         const page = await browser.newPage();
         await page.goto(url);
         return [page, browser];
@@ -107,9 +107,9 @@ async function monitor(url) {
 
 
     try {
-        await brow.close();
+        page.close().then(d => brow.close())
     } catch (error) {
-        console.log("Error closing browser", error)
+        console.log("Error closing page or browser", error)
     }
 
 
