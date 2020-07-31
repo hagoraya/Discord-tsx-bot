@@ -86,8 +86,6 @@ async function getData(page) {
 async function monitor(url) {
     console.log(`Running Scraper with ${url}`)
 
-
-
     try {
         let values = await configBrower(url);
         var page = values[0];
@@ -95,17 +93,7 @@ async function monitor(url) {
     } catch (error) {
         console.log("Error setting configs for browser", error)
     }
-
-
-
-
-
-
-
     const StockData = await getData(page);
-
-
-
     try {
         page.close().then(d => brow.close())
     } catch (error) {
@@ -113,9 +101,8 @@ async function monitor(url) {
     }
 
 
-
-    const used = process.memoryUsage().heapUsed / 1024 / 1024;
-    console.log(`Scraper used ${Math.round(used * 100) / 100} MB`);
+    // const used = process.memoryUsage().heapUsed / 1024 / 1024;
+    // console.log(`Scraper used ${Math.round(used * 100) / 100} MB`);
     return StockData
 }
 
