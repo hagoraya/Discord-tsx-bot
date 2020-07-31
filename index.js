@@ -13,6 +13,8 @@ const regex = /^\w+$/
 
 
 bot.on('ready', () => {
+    bot.user.setStatus('Online')
+    bot.user.setActivity('| $$<Ticker>', { type: 'WATCHING', url: 'https://github.com/hagoraya/Discord-tsx-bot' })
     console.log('TSX Bot is online')
     main()
 })
@@ -42,6 +44,7 @@ function main() {
                 Scraper.monitor(URL).then((data) => {
                     if (data) {
                         // msg.reply(`\`\`\`${data.companyName}\n\nCurrent Price: $${data.price}\n52 Week High: $${data.high52}\n52 Week Low: $${data.low52} \`\`\``)
+
                         let embed = new Discord.MessageEmbed()
                             .setColor('#85bb65')
                             .setTitle(`${symbol.toUpperCase()}`)
