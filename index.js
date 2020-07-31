@@ -11,7 +11,7 @@ const PREFIX = '$$'
 var queue = [];
 
 const TOKEN = process.env.DISCORD_TOKEN
-const regex = /^[a-zA-z]+(\.[a-zA-z]+)+$/
+const regex = /[A-Za-z.]+/g;
 
 
 
@@ -49,6 +49,7 @@ async function main() {
 
                 Scraper.monitor(URL).then((data) => {
                     if (data) {
+                        // msg.reply(`\`\`\`${data.companyName}\n\nCurrent Price: $${data.price}\n52 Week High: $${data.high52}\n52 Week Low: $${data.low52} \`\`\``)
 
                         let embed = new Discord.MessageEmbed()
                             .setColor('#85bb65')
@@ -92,7 +93,7 @@ async function main() {
 
 function validTicker(ticker) {
     //console.log(ticker)
-    return regex.test(ticker)
+    return regex.exec(ticker)
 
 }
 
