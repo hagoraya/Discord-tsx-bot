@@ -2,13 +2,16 @@ require('dotenv').config();
 const Discord = require('discord.js')
 const bot = new Discord.Client();
 const Scraper = require('./Scraper')
+const Database = require('./server')
+
 const PREFIX = '$$'
+
 
 
 var queue = [];
 
 const TOKEN = process.env.DISCORD_TOKEN
-const regex = /^\w+$/
+const regex = /^[a-zA-z]+(\.[a-zA-z]+)+$/
 
 
 
@@ -16,12 +19,15 @@ bot.on('ready', () => {
     bot.user.setStatus('Online')
     bot.user.setActivity('| $$<Ticker>', { type: 'WATCHING', url: 'https://github.com/hagoraya/Discord-tsx-bot' })
     console.log('TSX Bot is online')
+    Database.connectToDB().then(
+        console.log("Connected to Database")
+    )
     main()
 })
 
 
 
-function main() {
+async function main() {
 
     bot.on('message', (msg) => {
 
@@ -35,15 +41,14 @@ function main() {
 
             const symbol = msg.content.substr(2)
             queue.push(symbol)
-            console.log(queue)
 
             while (queue.length > 0) {
                 const URL = `https://web.tmxmoney.com/company.php?qm_symbol=${queue.shift()}`
 
 
+
                 Scraper.monitor(URL).then((data) => {
                     if (data) {
-                        // msg.reply(`\`\`\`${data.companyName}\n\nCurrent Price: $${data.price}\n52 Week High: $${data.high52}\n52 Week Low: $${data.low52} \`\`\``)
 
                         let embed = new Discord.MessageEmbed()
                             .setColor('#85bb65')
@@ -60,6 +65,7 @@ function main() {
                             .setTimestamp()
 
 
+                        Database.savetoDB(symbol.toLowerCase())
 
                         msg.reply(embed)
                     } else {
@@ -76,8 +82,6 @@ function main() {
 
         }
 
-
-
     })
 
 
@@ -88,7 +92,7 @@ function main() {
 
 function validTicker(ticker) {
     //console.log(ticker)
-    return regex.exec(ticker)
+    return regex.test(ticker)
 
 }
 
