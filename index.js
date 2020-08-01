@@ -1,8 +1,9 @@
 require('dotenv').config();
 const Discord = require('discord.js')
+const { Worker, isMainThread } = require('worker_threads')
 const bot = new Discord.Client();
 const Scraper2 = require('./Scraper2')
-let workDir = __dirname + "./server.js"
+let workDir = __dirname + "/dbWorker.js"
 const Database = require('./server')
 
 const PREFIX = '$$'
@@ -18,9 +19,7 @@ const TOKEN = process.env.DISCORD_TOKEN
 bot.on('ready', () => {
     bot.user.setActivity('| $$<Ticker>', { type: 'WATCHING', url: 'https://github.com/hagoraya/Discord-tsx-bot' })
     console.log('TSX Bot is online')
-    Database.connectToDB().then(
-        console.log("Connected to Database")
-    )
+    Database.connectToDB().then(() => { console.log("Database connection established") })
     main()
 })
 
@@ -66,6 +65,9 @@ async function main() {
                             .setTimestamp()
 
 
+
+
+
                         Database.savetoDB(symbol.toLowerCase())
 
                         msg.reply(embed)
@@ -73,21 +75,7 @@ async function main() {
                         msg.reply(`Cannot find \`${symbol}\` on TSX`)
                     }
                 })
-
-
-
-
-
-
-
-
             }
-
-
-
-
-
-
         }
 
     })
