@@ -16,7 +16,6 @@ const regex = /[A-Za-z.]+/g;
 
 
 bot.on('ready', () => {
-    bot.user.setStatus('Online')
     bot.user.setActivity('| $$<Ticker>', { type: 'WATCHING', url: 'https://github.com/hagoraya/Discord-tsx-bot' })
     console.log('TSX Bot is online')
     Database.connectToDB().then(
