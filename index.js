@@ -57,6 +57,7 @@ async function main() {
                             .addFields(
                                 { name: 'Company Name', value: `${data.companyName}` },
                                 { name: 'Current Price', value: `${data.price}` },
+                                { name: 'Change', value: `${data.percentChange}%` },
                                 { name: '52 Week High', value: `${data.high52}` },
                                 { name: '52 Week Low', value: `${data.low52}` },
                                 { name: 'TSX Link', value: `${URL}` }

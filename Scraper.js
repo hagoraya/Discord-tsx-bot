@@ -36,6 +36,7 @@ async function getData(page) {
         exchange: '',
         price: '',
         symbol: '',
+        percentChange: '',
         high52: '',
         low52: '',
     }
@@ -75,8 +76,21 @@ async function getData(page) {
         return this.type === 'text'
     }).text().trim()
 
-    //console.log("Stock Data: \n", StockData)
 
+
+
+    $('.text-red, .text-green, .change-off', html).each(function (i, item) {
+        if (item.name === 'strong') {
+            var content = item.children[0].data.trim();
+            var arr = content.split('\n')
+            var finalResult = arr[1].replace(/\t/g, '').toString();
+            finalResult = finalResult.substring(1, finalResult.length - 2)
+            StockData.percentChange = finalResult
+        }
+    })
+
+
+    //console.log('Stock Data:', StockData)
 
 
     return StockData
@@ -105,5 +119,7 @@ async function monitor(url) {
     // console.log(`Scraper used ${Math.round(used * 100) / 100} MB`);
     return StockData
 }
+
+
 
 module.exports.monitor = monitor; 
