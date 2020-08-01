@@ -1,7 +1,8 @@
 require('dotenv').config();
 const Discord = require('discord.js')
 const bot = new Discord.Client();
-const Scraper = require('./Scraper')
+const Scraper2 = require('./Scraper2')
+let workDir = __dirname + "./server.js"
 const Database = require('./server')
 
 const PREFIX = '$$'
@@ -11,7 +12,6 @@ const PREFIX = '$$'
 var queue = [];
 
 const TOKEN = process.env.DISCORD_TOKEN
-const regex = /[A-Za-z.]+/g;
 
 
 
@@ -36,7 +36,7 @@ async function main() {
         //Ignore the msg if it was sent in the dms
         if (msg.channel.type === 'dms') { return; }
 
-        if (msg.content.startsWith(PREFIX) && validTicker(msg.content.substr(2))) {
+        if (msg.content.startsWith(PREFIX)) {
 
             const symbol = msg.content.substr(2)
             queue.push(symbol)
@@ -46,7 +46,7 @@ async function main() {
 
 
 
-                Scraper.monitor(URL).then((data) => {
+                Scraper2.startScraper(URL).then((data) => {
                     if (data) {
                         // msg.reply(`\`\`\`${data.companyName}\n\nCurrent Price: $${data.price}\n52 Week High: $${data.high52}\n52 Week Low: $${data.low52} \`\`\``)
 
@@ -74,6 +74,13 @@ async function main() {
                     }
                 })
 
+
+
+
+
+
+
+
             }
 
 
@@ -88,13 +95,5 @@ async function main() {
 
 }
 
-
-
-
-function validTicker(ticker) {
-    //console.log(ticker)
-    return regex.exec(ticker)
-
-}
 
 bot.login(TOKEN);
