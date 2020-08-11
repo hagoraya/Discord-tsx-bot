@@ -13,6 +13,6 @@ Type in chat ```$$<Ticker> ``` to get the Stock Information
 ### Features
 - [x] Stock Data for TSX Stocks
 - [x] Stock Data for US Stocks
-- [ ] Cyrto 
+- [ ] Cryptocurrency Data 
 - [ ] Daily Charts
 
