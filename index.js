@@ -2,7 +2,8 @@ require('dotenv').config();
 const Discord = require('discord.js')
 const { Worker, isMainThread } = require('worker_threads')
 const bot = new Discord.Client();
-const Scraper2 = require('./Scraper2')
+const Scraper2 = require('./Scraper')
+const finhub = require('./finnhubAPI')
 let workDir = __dirname + "/dbWorker.js"
 const Database = require('./server')
 
@@ -65,14 +66,31 @@ async function main() {
                             .setTimestamp()
 
 
-
-
-
                         Database.savetoDB(symbol.toLowerCase())
 
                         msg.reply(embed)
                     } else {
-                        msg.reply(`Cannot find \`${symbol}\` on TSX`)
+                        finhub.getData(symbol).then((sdata) => {
+                            if (sdata) {
+
+
+                                let embed = new Discord.MessageEmbed()
+                                    .setColor('#85bb65')
+                                    .setTitle(`${symbol.toUpperCase()}`)
+                                    .addFields(
+                                        { name: 'Current Price', value: `${sdata.current}` },
+                                        { name: 'Today\'s High', value: `${sdata.high}` },
+                                        { name: 'Today\'s Low', value: `${sdata.low}` },
+                                        { name: 'Opened at', value: `${sdata.openedAt}` },
+                                        { name: 'Prev Closed', value: `${sdata.pervClose}` }
+                                    )
+                                    .setTimestamp()
+                                Database.savetoDB(symbol.toLowerCase())
+                                msg.reply(embed)
+                            } else {
+                                msg.reply(`Cannot find \`${symbol}\` on TSX`)
+                            }
+                        })
                     }
                 })
             }

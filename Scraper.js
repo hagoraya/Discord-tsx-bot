@@ -1,36 +1,42 @@
-const puppeteer = require('puppeteer');
-const $ = require('cheerio')
+const { Worker, isMainThread } = require('worker_threads')
+const cheerio = require('cheerio')
+const axios = require('axios')
 
 
-//Run Scraper
-
-async function configBrower(url) {
 
 
-    try {
-        const browser = await puppeteer.launch({ args: ['--no-sandbox', '--single-process'] });
-        const page = await browser.newPage();
-        await page.goto(url);
-        return [page, browser];
+async function startScraper(url) {
+    let res = await fetchData(url);
+    if (!res.data) {
+        Console.error("Invalid data object")
+        return null;
 
-    } catch (error) {
-        console.log("Error in configBrower", error);
     }
-
+    const html = res.data;
+    const stockdata = extractStockData(html);
+    return stockdata;
 
 }
 
-async function getData(page) {
-    try {
-        await page.reload();
 
-    } catch (error) {
-        console.log("Error whole page reload", error)
+
+async function fetchData(url) {
+    console.log(`Crawling: ${url}`);
+    //make a http call to url
+    let response = await axios(url).catch((err) => console.log(err))
+
+    if (response.status !== 200) {
+        console.log("Error fetching data")
+        return;
     }
 
-    let html = await page.evaluate(() => document.body.innerHTML);
-    // console.log(html)
+    return response;
 
+}
+
+
+function extractStockData(html) {
+    const $ = cheerio.load(html)
     var StockData = {
         companyName: '',
         exchange: '',
@@ -41,10 +47,6 @@ async function getData(page) {
         low52: '',
     }
 
-    //If invalid symbol
-
-
-    // console.log($(html).find('.quote-company-name ').length)
 
     if ($(html).find('.quote-company-name ').length < 1) {
         return null
@@ -77,8 +79,6 @@ async function getData(page) {
     }).text().trim()
 
 
-
-
     $('.text-red, .text-green, .change-off', html).each(function (i, item) {
         if (item.name === 'strong') {
             var content = item.children[0].data.trim();
@@ -90,36 +90,10 @@ async function getData(page) {
     })
 
 
-    //console.log('Stock Data:', StockData)
+    return StockData;
 
-
-    return StockData
-}
-
-
-async function monitor(url) {
-    console.log(`Running Scraper with ${url}`)
-
-    try {
-        let values = await configBrower(url);
-        var page = values[0];
-        var brow = values[1];
-    } catch (error) {
-        console.log("Error setting configs for browser", error)
-    }
-    const StockData = await getData(page);
-    try {
-        page.close().then(d => brow.close())
-    } catch (error) {
-        console.log("Error closing page or browser", error)
-    }
-
-
-    // const used = process.memoryUsage().heapUsed / 1024 / 1024;
-    // console.log(`Scraper used ${Math.round(used * 100) / 100} MB`);
-    return StockData
 }
 
 
 
-module.exports.monitor = monitor; 
+module.exports.startScraper = startScraper;
