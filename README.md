@@ -9,3 +9,10 @@ Discord bot to getting stock data from TSX with a quick and easy command.
 
 Type in chat ```$$<Ticker> ``` to get the Stock Information
 
+
+### Features
+- [x] Stock Data for TSX Stocks
+- [x] Stock Data for US Stocks
+- [] Cyrto 
+- [] Daily Charts
+
