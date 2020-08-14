@@ -1,11 +1,10 @@
 require('dotenv').config();
 const Discord = require('discord.js')
-const { Worker, isMainThread } = require('worker_threads')
 const bot = new Discord.Client();
 const Scraper2 = require('./Scraper')
 const finhub = require('./finnhubAPI')
-let workDir = __dirname + "/dbWorker.js"
 const Database = require('./server')
+const YahooScraper = require('./BETA/YahooScraper')
 
 const PREFIX = '$$'
 
@@ -55,7 +54,7 @@ async function main() {
                             .setTitle(`${symbol.toUpperCase()}`)
                             .setURL(`${URL}`)
                             .addFields(
-                                { name: 'Company Name', value: `${data.companyName}` },
+                                { name: 'Company', value: `${data.companyName}` },
                                 { name: 'Current Price', value: `${data.price}` },
                                 { name: 'Change', value: `${data.percentChange}%` },
                                 { name: '52 Week High', value: `${data.high52}` },
@@ -70,19 +69,20 @@ async function main() {
 
                         msg.reply(embed)
                     } else {
-                        finhub.getData(symbol).then((sdata) => {
-                            if (sdata) {
+                        YahooScraper.startScraper(symbol).then((ydata) => {
+                            if (ydata) {
 
+                                console.log(ydata)
 
                                 let embed = new Discord.MessageEmbed()
                                     .setColor('#85bb65')
                                     .setTitle(`${symbol.toUpperCase()}`)
                                     .addFields(
-                                        { name: 'Current Price', value: `${sdata.current}` },
-                                        { name: 'Today\'s High', value: `${sdata.high}` },
-                                        { name: 'Today\'s Low', value: `${sdata.low}` },
-                                        { name: 'Opened at', value: `${sdata.openedAt}` },
-                                        { name: 'Prev Closed', value: `${sdata.pervClose}` }
+                                        { name: 'Company', value: `${ydata.companyName}` },
+                                        { name: 'Current Price', value: `${ydata.currentPrice}` },
+                                        { name: 'Change', value: `${ydata.change}` },
+                                        { name: '52 Week Range', value: `${ydata.range52}` },
+                                        { name: 'More Info', value: `${ydata.link}` }
                                     )
                                     .setTimestamp()
                                 Database.savetoDB(symbol.toLowerCase())

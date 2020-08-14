@@ -1,4 +1,3 @@
-const { Worker, isMainThread } = require('worker_threads')
 const cheerio = require('cheerio')
 const axios = require('axios')
 
