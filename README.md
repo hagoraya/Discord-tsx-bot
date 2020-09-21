@@ -21,3 +21,6 @@ Just type in chat ```$$<Ticker> ``` to get the latest stock information
 - [ ] Cryptocurrency Data 
 - [ ] Daily Charts
 
+
+### Updates
+- [2020-09-21]  TMX data source has been removed. Both US and Canadian stocks now use data from Yahoo Finance.
