@@ -65,13 +65,12 @@ async function startScraper(ticker) {
     let data = await getData(yahooURl)
 
 
-    console.log(data)
+    //console.log(data)
 
-    //  return data;
+    return data;
 
 }
 
 
-startScraper('well.to')
 
 module.exports.startScraper = startScraper;
