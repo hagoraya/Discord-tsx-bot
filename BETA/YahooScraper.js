@@ -42,8 +42,8 @@ async function getData(url) {
         })
 
         //To get extra information
-        $('div[data-test="left-summary-table"] > table[data-reactid="36"] > tbody', html).each(function (i, item) {
-            StockData.range52 = $('tr[data-reactid="62"] > td[data-reactid="65"]', item).text()
+        $('div[data-test="left-summary-table"] > table > tbody', html).each(function (i, item) {
+            StockData.range52 = $('tr  > td[data-test="FIFTY_TWO_WK_RANGE-value"]', item).text()
 
         })
 
@@ -58,8 +58,6 @@ async function getData(url) {
 
 
 
-
-
 async function startScraper(ticker) {
 
     const yahooURl = `${URL}${ticker}`
@@ -67,15 +65,13 @@ async function startScraper(ticker) {
     let data = await getData(yahooURl)
 
 
+    console.log(data)
 
-
-    return data;
-
-
-
+    //  return data;
 
 }
 
 
+startScraper('well.to')
 
 module.exports.startScraper = startScraper;
