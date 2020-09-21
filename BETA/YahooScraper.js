@@ -39,14 +39,11 @@ async function getData(url) {
             StockData.companyName = $('h1[data-reactid="7"]', item).text()
             StockData.currentPrice = $('span[data-reactid="32"]', item).text()
             StockData.change = $('span[data-reactid="33"]', item).text()
-
-
         })
 
-
         //To get extra information
-        $('div[data-test="left-summary-table"] > table[data-reactid="38"] > tbody', html).each(function (i, item) {
-            StockData.range52 = $('tr[data-reactid="64"] > td[data-reactid="67"]', item).text()
+        $('div[data-test="left-summary-table"] > table[data-reactid="36"] > tbody', html).each(function (i, item) {
+            StockData.range52 = $('tr[data-reactid="62"] > td[data-reactid="65"]', item).text()
 
         })
 
@@ -61,15 +58,24 @@ async function getData(url) {
 
 
 
+
+
 async function startScraper(ticker) {
 
     const yahooURl = `${URL}${ticker}`
     console.log('Yahoo Scraping: ' + yahooURl)
     let data = await getData(yahooURl)
 
+
+
+
     return data;
 
 
+
+
 }
+
+
 
 module.exports.startScraper = startScraper;

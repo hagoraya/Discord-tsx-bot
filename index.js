@@ -43,56 +43,30 @@ async function main() {
             while (queue.length > 0) {
                 const URL = `https://web.tmxmoney.com/company.php?qm_symbol=${queue.shift()}`
 
+                YahooScraper.startScraper(symbol).then((ydata) => {
+                    if (ydata) {
 
-
-                Scraper2.startScraper(URL).then((data) => {
-                    if (data) {
-                        // msg.reply(`\`\`\`${data.companyName}\n\nCurrent Price: $${data.price}\n52 Week High: $${data.high52}\n52 Week Low: $${data.low52} \`\`\``)
+                        //console.log("Yahoo Data: ", ydata)
 
                         let embed = new Discord.MessageEmbed()
                             .setColor('#85bb65')
                             .setTitle(`${symbol.toUpperCase()}`)
-                            .setURL(`${URL}`)
                             .addFields(
-                                { name: 'Company', value: `${data.companyName}` },
-                                { name: 'Current Price', value: `${data.price}` },
-                                { name: 'Change', value: `${data.percentChange}%` },
-                                { name: '52 Week High', value: `${data.high52}` },
-                                { name: '52 Week Low', value: `${data.low52}` },
-                                { name: 'TSX Link', value: `${URL}` }
-
+                                { name: 'Company', value: `${ydata.companyName}` },
+                                { name: 'Current Price', value: `${ydata.currentPrice}` },
+                                { name: 'Change', value: `${ydata.change}` },
+                                { name: '52 Week Range', value: `${ydata.range52}` },
+                                { name: 'More Info', value: `${ydata.link}` }
                             )
                             .setTimestamp()
-
-
                         Database.savetoDB(symbol.toLowerCase())
-
                         msg.reply(embed)
                     } else {
-                        YahooScraper.startScraper(symbol).then((ydata) => {
-                            if (ydata) {
-
-                                console.log(ydata)
-
-                                let embed = new Discord.MessageEmbed()
-                                    .setColor('#85bb65')
-                                    .setTitle(`${symbol.toUpperCase()}`)
-                                    .addFields(
-                                        { name: 'Company', value: `${ydata.companyName}` },
-                                        { name: 'Current Price', value: `${ydata.currentPrice}` },
-                                        { name: 'Change', value: `${ydata.change}` },
-                                        { name: '52 Week Range', value: `${ydata.range52}` },
-                                        { name: 'More Info', value: `${ydata.link}` }
-                                    )
-                                    .setTimestamp()
-                                Database.savetoDB(symbol.toLowerCase())
-                                msg.reply(embed)
-                            } else {
-                                msg.reply(`Cannot find \`${symbol}\` on TSX`)
-                            }
-                        })
+                        msg.reply(`Cannot find \`${symbol}\` on TSX`)
                     }
                 })
+
+
             }
         }
 
