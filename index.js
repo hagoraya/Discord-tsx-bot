@@ -1,8 +1,6 @@
 require('dotenv').config();
 const Discord = require('discord.js')
 const bot = new Discord.Client();
-const Scraper2 = require('./Scraper')
-const finhub = require('./finnhubAPI')
 const Database = require('./server')
 const YahooScraper = require('./BETA/YahooScraper')
 
