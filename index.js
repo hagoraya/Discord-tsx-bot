@@ -54,13 +54,14 @@ async function main() {
                                 { name: 'Current Price', value: `${ydata.currentPrice}` },
                                 { name: 'Change', value: `${ydata.change}` },
                                 { name: '52 Week Range', value: `${ydata.range52}` },
+                                { name: 'Day\'s Range', value: `${ydata.dayRange}` },
                                 { name: 'More Info', value: `${ydata.link}` }
                             )
                             .setTimestamp()
                         Database.savetoDB(symbol.toLowerCase())
                         msg.reply(embed)
                     } else {
-                        msg.reply(`Cannot find \`${symbol}\` on TSX`)
+                        msg.reply(`Cannot find \`${symbol}\``)
                     }
                 })
 
