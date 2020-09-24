@@ -56,9 +56,8 @@ async function main() {
 
                         let embed = new Discord.MessageEmbed()
                             .setColor(getMessageColor(ydata.change))
-                            .setTitle(`${symbol.toUpperCase()}`)
+                            .setTitle(`${ydata.companyName}`)
                             .addFields(
-                                { name: 'Company', value: `${ydata.companyName}` },
                                 { name: 'Current Price', value: `${ydata.currentPrice}` },
                                 { name: 'Change', value: `${ydata.change}` },
                                 { name: '52 Week Range', value: `${ydata.range52}` },
