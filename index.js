@@ -21,7 +21,15 @@ bot.on('ready', () => {
     main()
 })
 
+function getMessageColor(value) {
+    const GREEN = '#85bb65'
+    const WHITE = '#f5f5f5'
+    const RED = '#f51c0c'
 
+    if (value.charAt(0) === '+') { return GREEN }
+    else if (value.charAt(0) === '-') { return RED }
+    else return WHITE;
+}
 
 async function main() {
 
@@ -47,7 +55,7 @@ async function main() {
                         //console.log("Yahoo Data: ", ydata)
 
                         let embed = new Discord.MessageEmbed()
-                            .setColor('#85bb65')
+                            .setColor(getMessageColor(ydata.change))
                             .setTitle(`${symbol.toUpperCase()}`)
                             .addFields(
                                 { name: 'Company', value: `${ydata.companyName}` },
