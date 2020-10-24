@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Discord-tsx-bot
 Discord bot to getting stock data from TSX with a quick and easy command. 
 
@@ -20,4 +21,5 @@ Just type in chat ```$$<Ticker> ``` to get the latest stock information
 - [x] Stock Data for US Stocks
 - [x] Cryptocurrency Data (Adding more data soon)
 - [ ] Daily Charts
+
 
