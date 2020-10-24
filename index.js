@@ -46,6 +46,19 @@ async function main() {
         //Ignore the msg if it was sent in the dms
         if (msg.channel.type === 'dms') { return; }
 
+
+        if (msg.content === '!HELP') {
+            let embed = new Discord.MessageEmbed()
+                .setTitle('TSX BOT 🤖')
+                .setDescription(
+                    'Use $$<Ticker> to get stock info for US and Canadian Stocks e.g $$TSLA \n\n Use %%<Ticker> to get Crypotcurrency info'
+                )
+                .setFooter(
+                    'Contact Dvious#7874 for help 👨‍💻'
+                )
+            msg.reply(embed)
+        }
+
         //For stocks
         if (msg.content.startsWith(STOCK_PREFIX)) {
 
