@@ -1,10 +1,14 @@
 require('dotenv').config();
+
 const Discord = require('discord.js')
 const bot = new Discord.Client();
+
 const Database = require('./server')
 const YahooScraper = require('./BETA/YahooScraper')
+const CryptoData = require('./Crypto')
 
-const PREFIX = '$$'
+const STOCK_PREFIX = '$$'
+const CRYPTO_PREFIX = '%%'
 
 
 
@@ -22,6 +26,7 @@ bot.on('ready', () => {
 })
 
 function getMessageColor(value) {
+
     const GREEN = '#85bb65'
     const WHITE = '#f5f5f5'
     const RED = '#f51c0c'
@@ -41,7 +46,8 @@ async function main() {
         //Ignore the msg if it was sent in the dms
         if (msg.channel.type === 'dms') { return; }
 
-        if (msg.content.startsWith(PREFIX)) {
+        //For stocks
+        if (msg.content.startsWith(STOCK_PREFIX)) {
 
             const symbol = msg.content.substr(2)
             queue.push(symbol)
@@ -52,7 +58,8 @@ async function main() {
                 YahooScraper.startScraper(symbol).then((ydata) => {
                     if (ydata) {
 
-                        //console.log("Yahoo Data: ", ydata)
+                        console.log("Yahoo Data: ", ydata)
+
 
                         let embed = new Discord.MessageEmbed()
                             .setColor(getMessageColor(ydata.change))
@@ -69,11 +76,39 @@ async function main() {
                         msg.reply(embed)
                     } else {
                         msg.reply(`Cannot find \`${symbol}\``)
+
                     }
                 })
 
 
             }
+        }
+
+        //For crypto
+        if (msg.content.startsWith(CRYPTO_PREFIX)) {
+            const symbol = msg.content.substr(2)
+
+            const cData = CryptoData.getData(symbol)
+            cData.then((data) => {
+                if (data) {
+                    // console.log(data);
+                    let embed = new Discord.MessageEmbed()
+                        .setColor('#85bb65')
+                        .setTitle(`${data.name}`)
+                        .addFields(
+                            { name: 'Current Price', value: `${data.price}` },
+                            { name: 'Market Cap', value: `${data.market_cap}` },
+                            { name: 'Current Volume', value: `${data.volume}` },
+                        )
+
+                    msg.reply(embed)
+                }
+            })
+                .catch((err) => {
+                    console.log(err);
+                    msg.reply(err)
+                })
+
         }
 
     })

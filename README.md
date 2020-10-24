@@ -18,6 +18,6 @@ Just type in chat ```$$<Ticker> ``` to get the latest stock information
 ### Features
 - [x] Stock Data for TSX Stocks
 - [x] Stock Data for US Stocks
-- [ ] Cryptocurrency Data 
+- [x] Cryptocurrency Data (Adding more data soon)
 - [ ] Daily Charts
 
