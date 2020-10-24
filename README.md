@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Discord-tsx-bot
 Discord bot to getting stock data from TSX with a quick and easy command. 
 
