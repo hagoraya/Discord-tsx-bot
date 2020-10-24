@@ -19,7 +19,7 @@ const TOKEN = process.env.DISCORD_TOKEN
 
 
 bot.on('ready', () => {
-    bot.user.setActivity('| $$<Ticker>', { type: 'WATCHING', url: 'https://github.com/hagoraya/Discord-tsx-bot' })
+    bot.user.setActivity('!HELP', { type: 'WATCHING', url: 'https://github.com/hagoraya/Discord-tsx-bot' })
     console.log('TSX Bot is online')
     Database.connectToDB().then(() => { console.log("Database connection established") })
     main()
