@@ -51,10 +51,7 @@ async function main() {
             let embed = new Discord.MessageEmbed()
                 .setTitle('TSX BOT 🤖')
                 .setDescription(
-                    'Use $$<Ticker> to get stock info for US and Canadian Stocks e.g $$TSLA \n\n Use %%<Ticker> to get Crypotcurrency info'
-                )
-                .setFooter(
-                    'Contact Dvious#7874 for help 👨‍💻'
+                    'Use \`$$<Ticker>\` to get stock info for US and Canadian Stocks e.g ($$TSLA) \n\n Use \`%%<Ticker>\` to get Crypotcurrency info ($$BTC) \n\n [Support Server](https://discord.gg/5aXyWySf59)'
                 )
             msg.reply(embed)
         }
