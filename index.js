@@ -4,7 +4,7 @@ const Discord = require("discord.js");
 const bot = new Discord.Client();
 
 const Database = require("./server");
-const YahooScraper = require("./BETA/YahooScraper");
+const YahooScraper = require("./YahooScraper");
 const CryptoData = require("./Crypto");
 
 const STOCK_PREFIX = "$$";
